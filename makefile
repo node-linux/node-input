@@ -1,12 +1,12 @@
 NODE=-I/usr/include/node -I$(CURDIR)node_modules/node-addon-api/ -I$(shell node -p "require('node-addon-api').include")
-INCLUDE=$(NODE)
+INCLUDE=$(NODE) --std=c++20
 LIBS=$(shell pkg-config --cflags --libs libinput libudev)
 
 BUILD_DIR=./build
 SRC_DIR=./lib
 
-input.node: clean lib.o
-	g++ $(BUILD_DIR)/lib.o -shared -fPIC -o $(BUILD_DIR)/input.node -Wall -Wextra $(LIBS) $(INCLUDE)
+input.node: clean lib.o handlers.o
+	g++ $(BUILD_DIR)/lib.o $(BUILD_DIR)/handlers.o -shared -fPIC -o $(BUILD_DIR)/input.node -Wall -Wextra $(LIBS) $(INCLUDE)
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -14,6 +14,9 @@ clean:
 
 lib.o:
 	g++ -c $(SRC_DIR)/lib.cpp -o $(BUILD_DIR)/lib.o -shared -fPIC $(LIBS) $(INCLUDE)
+
+handlers.o:
+	g++ -c $(SRC_DIR)/handlers.cpp -o $(BUILD_DIR)/handlers.o -shared -fPIC $(LIBS) $(INCLUDE)
 
 install:
 	scp -i ~/.ssh/id_general -P 2222 ./build/input.node jcake@localhost:/home/jcake/node-linux/input/input.node

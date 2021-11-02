@@ -1,4 +1,6 @@
 
 const input = require('./input.node');
 
-console.log(input);
+input.init(function(type, event) {
+    console.log(type, event);
+});
