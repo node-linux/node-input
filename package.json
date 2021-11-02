@@ -1,0 +1,13 @@
+{
+  "name": "input",
+  "version": "1.0.0",
+  "typings": "./index.d.ts",
+  "main": "./index.js",
+  "scripts": {
+    "postinstall": "make input.node"
+  },
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^4.0.0"
+  }
+}
